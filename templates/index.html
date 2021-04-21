@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <script type="text/javascript" src="../lib/d3.v5.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
 
 <!-- CSS styling  -->
 <style>
@@ -17,8 +20,8 @@
 
 <!-- Body  -->
 <body>
-    <h1> Python Fetch Example</h1>
-    <p id='embed'>{{embed}}</p><p id='mylog'/>
+    <h1> Song Recommender </h1>
+    <p id='display_text'></p>
 
     <input type = "button" onclick = "getData()" value = "Display">  
     <script>
@@ -29,8 +32,13 @@
                 }).then(function (text) {
                     console.log('GET response:');
                     console.log(text.greeting); 
+                    document.getElementById('display_text').innerHTML = text.greeting;
                     return text.greeting
                 });
         }
     </script>
+    <input class="form-control basicAutoComplete" type="text"
+        data-url="C:/Users/Nick/Documents/School/Spring_21/4242_DataVis/DataVisSongRecommender/data/sample.json"
+        autocomplete="on"
+        placeholder="Enter a song here...">
 <body>
