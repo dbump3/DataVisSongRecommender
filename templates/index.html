@@ -59,15 +59,14 @@ path.link {
 <!-- Body  -->
 <body>
     <script>
-        function getData() {
-            fetch('/test')
-                .then(function (response) {
-                    return response.json();
-                }).then(function (text) {
+        function updateSongInput() {
+            songId = $('#inputSong').val()
+            fetch(`/getdata/${songId}`)
+                .then(response => response.text())
+                .then(kSimilarSongs => {
                     console.log('GET response:');
-                    console.log(text.greeting);
-                    document.getElementById('display_text').innerHTML = text.greeting;
-                    return text.greeting
+                    console.log(kSimilarSongs);
+                    $('#outputSongs').text(kSimilarSongs);
                 });
         }
 
@@ -135,14 +134,21 @@ path.link {
 
     </script>
     <h1> Song Recommender </h1>
-    <p id='display_text'></p>
 
-    <input type = "button" onclick = "getData()" value = "Display">
-
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label>Languages</label>
-        <input class="form-control autocomplete" placeholder="Enter A" />
-    </div>
+        <input class="form-control autocomplete" placeholder="Enter a song" />
+    </div> -->
+
+    <!-- TODO: add autocomplete -->
+    <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputSong" class="sr-only">Song Name</label>
+            <input class="form-control" id="inputSong" placeholder="Song Name">
+          </div>
+        <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
+        <p id="outputSongs"></p>
+    </form>
 
 
 <div class= slider1>
