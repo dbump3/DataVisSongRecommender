@@ -32,6 +32,19 @@
 .attr3{
     color: #01bef0;
 }
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+.node {
+  fill: #ccc;
+  stroke: #fff;
+  stroke: black;
+  stroke-width: 1.5px;
+}
+
 
 </style>
 
@@ -72,6 +85,53 @@
                 source: availableTags
             });
         });
+
+
+// ANNIE STARTED CODING FORCE GRAPH HERE LOL
+
+    //sample data for nodes and edges
+        var nodes = [{'song_id': 123, 'song_name': "Fireworks", 'weight': 1}, {'song_id': 20, 'song_name': "Toxic", 'weight': 0.8}]
+        var nodeIDs = list((object['song_id'] for object in nodes))
+
+        var edges = [{source: 123, target: 20}]
+
+        var width = 1000;
+        var height = 600;
+
+
+        var force = d3.forceSimulation()
+            .nodes(d3.values(nodeIDs))
+            .force("link", d3.forceLink(edges).distance(100))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force("x", d3.forceX())
+            .force("y", d3.forceY())
+            .force("charge", d3.forceManyBody().strength(-250))
+            .alphaTarget(1)
+            .on("tick", tick);
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var path = svg.append("g")
+            .selectAll("path")
+            .data(edges)
+            .enter()
+            .append("path")
+            .attr("class", function(d) { return "link " + d.type; });
+
+        var node = svg.selectAll(".node")
+            .data(force.nodes())
+            .enter().append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("class", "unpinned")
+            .attr("r", 5);
 
     </script>
     <h1> Song Recommender </h1>
