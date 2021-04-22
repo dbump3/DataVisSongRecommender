@@ -26,7 +26,7 @@ def getKSimilarSongs(songId, k):
     kMostSimlarIndexes = np.argpartition(diff, k)[1:k+1]
 
     # return array containing k pairs of [songId, similarityRating]
-    return np.column_stack((data[kMostSimlarIndexes][:,0], diff[kMostSimlarIndexes]))
+    return (np.column_stack((data[kMostSimlarIndexes][:,0], diff[kMostSimlarIndexes]))).tolist()
     
 
 # sample input:
