@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<script type="text/javascript" src="../lib/d3.v5.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-bootstrap/0.5pre/css/custom-theme/jquery-ui-1.10.0.custom.css" rel="stylesheet"/>
@@ -90,14 +90,15 @@ path.link {
 
     //sample data for nodes and edges
         var nodes = [{'song_id': 123, 'song_name': "Fireworks", 'weight': 1}, {'song_id': 20, 'song_name': "Toxic", 'weight': 0.8}]
-        var nodeIDs = list((object['song_id'] for object in nodes))
+        var nodeIDs = nodes.map(x => x['song_id'])
 
         var edges = [{source: 123, target: 20}]
 
         var width = 1000;
         var height = 600;
 
-
+        // force simulation function is not defined,
+        // also there isn't any html element this is being added to.  - Daniel
         var force = d3.forceSimulation()
             .nodes(d3.values(nodeIDs))
             .force("link", d3.forceLink(edges).distance(100))
