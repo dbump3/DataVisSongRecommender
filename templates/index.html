@@ -12,6 +12,26 @@
 
 <!-- CSS styling  -->
 <style>
+.slider1 {
+    width: 20%;
+}
+
+.slider2 {
+    width: 20%;
+}
+
+.slider3 {
+    width:20%;
+}
+.attr1{
+    color: #060558;
+}
+.attr2{
+    color: #064da6;
+}
+.attr3{
+    color: #01bef0;
+}
 
 </style>
 
@@ -32,12 +52,12 @@
                     return response.json();
                 }).then(function (text) {
                     console.log('GET response:');
-                    console.log(text.greeting); 
+                    console.log(text.greeting);
                     document.getElementById('display_text').innerHTML = text.greeting;
                     return text.greeting
                 });
         }
-            
+
         // for autocomplete
         $(function() {
             // TODO load from a file containing track names instead of these placeholders
@@ -47,7 +67,7 @@
                 "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl",
                 "PHP", "Python", "Ruby", "Scala", "Scheme"
             ];
-  
+
             $(".autocomplete").autocomplete({
                 source: availableTags
             });
@@ -57,10 +77,46 @@
     <h1> Song Recommender </h1>
     <p id='display_text'></p>
 
-    <input type = "button" onclick = "getData()" value = "Display"> 
+    <input type = "button" onclick = "getData()" value = "Display">
 
     <div class="form-group">
         <label>Languages</label>
         <input class="form-control autocomplete" placeholder="Enter A" />
     </div>
+
+
+<div class= slider1>
+    <label class = attr1>Attribute 1 Slider</label>
+    <div class="d-flex justify-content-center my-4">
+        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+        <form class="range-field w-100">
+            <input class="border-0" type="range" min="0" max="100" />
+        </form>
+        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+    </div>
+</div>
+
+<div class= slider2>
+    <label class=attr2>Attribute 2 Slider</label>
+    <div class="d-flex justify-content-center my-4">
+        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+        <form class="range-field w-100">
+            <input class="border-0" type="range" min="0" max="100" />
+        </form>
+        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+    </div>
+</div>
+
+<div class= slider3>
+    <label class = attr3>Attribute 3 Slider</label>
+    <div class="d-flex justify-content-center my-4">
+        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+        <form class="range-field w-100">
+            <input class="border-0" type="range" min="0" max="100" />
+        </form>
+        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+    </div>
+</div>
+
+
 <body>
