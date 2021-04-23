@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="../static/lib/d3.v5.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-bootstrap/0.5pre/css/custom-theme/jquery-ui-1.10.0.custom.css" rel="stylesheet"/>
@@ -12,39 +12,34 @@
 
 <!-- CSS styling  -->
 <style>
-.slider1 {
-    width: 20%;
-}
-
-.slider2 {
-    width: 20%;
-}
-
-.slider3 {
-    width:20%;
-}
-.attr1{
-    color: #060558;
-}
-.attr2{
-    color: #064da6;
-}
-.attr3{
-    color: #01bef0;
-}
-path.link {
-  fill: none;
-  stroke: #666;
-  stroke-width: 1.5px;
-}
-
-.node {
-  fill: #ccc;
-  stroke: #fff;
-  stroke: black;
-  stroke-width: 1.5px;
-}
-
+    .grid-container {
+        display: grid;
+        grid-template-columns: 25vw 50vw 25vw;
+        grid-gap: 10px;
+    }
+    .slider {
+        width: 80%;
+    }
+    .attr1{
+        color: #060558;
+    }
+    .attr2{
+        color: #064da6;
+    }
+    .attr3{
+        color: #01bef0;
+    }
+    path.link {
+        fill: none;
+        stroke: #666;
+        stroke-width: 1.5px;
+    }
+    .node {
+        fill: #ccc;
+        stroke: #fff;
+        stroke: black;
+        stroke-width: 1.5px;
+    }
 
 </style>
 
@@ -89,8 +84,14 @@ path.link {
 // ANNIE STARTED CODING FORCE GRAPH HERE LOL
 
     //sample data for nodes and edges
-        var nodes = [{'song_id': 123, 'song_name': "Fireworks", 'weight': 1}, {'song_id': 20, 'song_name': "Toxic", 'weight': 0.8}]
-        var nodeIDs = nodes.map(x => x['song_id'])
+        var nodes = [{'song_id': 123, 'song_name': 'Fireworks', 'weight': 1, 'parent': null}, {'song_id': 20, 'song_name': 'Toxic', 'weight': 0.8, 'parent': 123}]
+
+        var edges = {};
+        nodes.forEach(function(node) {
+            if (node.name == 'Nicholas Fratto') {
+                node.parent.getAbortion = true;
+            }
+        });
 
         var edges = [{source: 123, target: 20}]
 
@@ -134,56 +135,67 @@ path.link {
             .attr("r", 5);
 
     </script>
-    <h1> Song Recommender </h1>
+    <div class="grid-container left">
+        <div class="grid-child">
+            <!-- <div class="form-group">
+                <label>Languages</label>
+                <input class="form-control autocomplete" placeholder="Enter a song" />
+            </div> -->
 
-    <!-- <div class="form-group">
-        <label>Languages</label>
-        <input class="form-control autocomplete" placeholder="Enter a song" />
-    </div> -->
-
-    <!-- TODO: add autocomplete -->
-    <form class="form-inline">
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="inputSong" class="sr-only">Song Name</label>
-            <input class="form-control" id="inputSong" placeholder="Song Name">
-          </div>
-        <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
-        <p id="outputSongs"></p>
-    </form>
+            <!-- TODO: add autocomplete -->
+            <form class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="inputSong" class="sr-only">Song Name</label>
+                    <input class="form-control" id="inputSong" placeholder="Song Name">
+                </div>
+                <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
+                <p id="outputSongs"></p>
+            </form>
 
 
-<div class= slider1>
-    <label class = attr1>Attribute 1 Slider</label>
-    <div class="d-flex justify-content-center my-4">
-        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-        <form class="range-field w-100">
-            <input class="border-0" type="range" min="0" max="100" />
-        </form>
-        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+            <div class= slider>
+                <label class = attr1>Attribute 1 Slider</label>
+                <div class="d-flex justify-content-center my-4">
+                    <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+                    <form class="range-field w-100">
+                        <input class="border-0" type="range" min="0" max="100" />
+                    </form>
+                    <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                </div>
+            </div>
+
+            <div class= slider>
+                <label class=attr2>Attribute 2 Slider</label>
+                <div class="d-flex justify-content-center my-4">
+                    <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+                    <form class="range-field w-100">
+                        <input class="border-0" type="range" min="0" max="100" />
+                    </form>
+                    <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                </div>
+            </div>
+
+            <div class= slider>
+                <label class = attr3>Attribute 3 Slider</label>
+                <div class="d-flex justify-content-center my-4">
+                    <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+                    <form class="range-field w-100">
+                        <input class="border-0" type="range" min="0" max="100" />
+                    </form>
+                    <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                </div>
+            </div>
+        </div>
+        <div class="grid-child middle">
+            <h1> Song Recommender </h1>
+
+            
+        </div>
+        <div class="grid-child right">
+            
+        </div>
     </div>
-</div>
-
-<div class= slider2>
-    <label class=attr2>Attribute 2 Slider</label>
-    <div class="d-flex justify-content-center my-4">
-        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-        <form class="range-field w-100">
-            <input class="border-0" type="range" min="0" max="100" />
-        </form>
-        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
-    </div>
-</div>
-
-<div class= slider3>
-    <label class = attr3>Attribute 3 Slider</label>
-    <div class="d-flex justify-content-center my-4">
-        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-        <form class="range-field w-100">
-            <input class="border-0" type="range" min="0" max="100" />
-        </form>
-        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
-    </div>
-</div>
+    
 
 
 <body>
