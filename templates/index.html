@@ -9,7 +9,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
 
-
 <!-- CSS styling  -->
 <style>
     .grid-container {
@@ -53,88 +52,8 @@
 
 <!-- Body  -->
 <body>
-    <script>
-        function updateSongInput() {
-            songId = $('#inputSong').val()
-            fetch(`/getdata/${songId}`)
-                .then(response => response.text())
-                .then(kSimilarSongs => {
-                    console.log('GET response:');
-                    console.log(kSimilarSongs);
-                    $('#outputSongs').text(kSimilarSongs);
-                });
-        }
-
-        // for autocomplete
-        $(function() {
-            // TODO load from a file containing track names instead of these placeholders
-            var availableTags = [
-                "ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++",
-                "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran",
-                "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl",
-                "PHP", "Python", "Ruby", "Scala", "Scheme"
-            ];
-
-            $(".autocomplete").autocomplete({
-                source: availableTags
-            });
-        });
-
-
-// ANNIE STARTED CODING FORCE GRAPH HERE LOL
-
-    //sample data for nodes and edges
-        var nodes = [{'song_id': 123, 'song_name': 'Fireworks', 'weight': 1, 'parent': null}, {'song_id': 20, 'song_name': 'Toxic', 'weight': 0.8, 'parent': 123}]
-
-        var edges = {};
-        nodes.forEach(function(node) {
-            
-        });
-
-        var edges = [{source: 123, target: 20}]
-
-        var width = 1000;
-        var height = 600;
-
-        // force simulation function is not defined,
-        // also there isn't any html element this is being added to.  - Daniel
-        var force = d3.forceSimulation()
-            .nodes(d3.values(nodeIDs))
-            .force("link", d3.forceLink(edges).distance(100))
-            .force('center', d3.forceCenter(width / 2, height / 2))
-            .force("x", d3.forceX())
-            .force("y", d3.forceY())
-            .force("charge", d3.forceManyBody().strength(-250))
-            .alphaTarget(1)
-            .on("tick", tick);
-
-        var svg = d3.select("body").append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        var path = svg.append("g")
-            .selectAll("path")
-            .data(edges)
-            .enter()
-            .append("path")
-            .attr("class", function(d) { return "link " + d.type; });
-
-        var node = svg.selectAll(".node")
-            .data(force.nodes())
-            .enter().append("g")
-            .attr("class", "node")
-            .call(d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended));
-
-        node.append("circle")
-            .attr("class", "unpinned")
-            .attr("r", 5);
-
-    </script>
-    <div class="grid-container left">
-        <div class="grid-child">
+    <div class="grid-container">
+        <div class="grid-child left">
             <!-- <div class="form-group">
                 <label>Languages</label>
                 <input class="form-control autocomplete" placeholder="Enter a song" />
@@ -184,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div class="grid-child middle">
+        <div class="grid-child middle" id="canvas">
             <h1> Song Recommender </h1>
 
             
@@ -193,7 +112,130 @@
             
         </div>
     </div>
-    
+    <script>
+        function updateSongInput() {
+            songId = $('#inputSong').val()
+            fetch(`/getdata/${songId}`)
+                .then(response => response.text())
+                .then(kSimilarSongs => {
+                    console.log('GET response:');
+                    console.log(kSimilarSongs);
+                    $('#outputSongs').text(kSimilarSongs);
+                });
+        }
+
+        // for autocomplete
+        $(function() {
+            // TODO load from a file containing track names instead of these placeholders
+            var availableTags = [
+                "ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++",
+                "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran",
+                "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl",
+                "PHP", "Python", "Ruby", "Scala", "Scheme"
+            ];
+
+            $(".autocomplete").autocomplete({
+                source: availableTags
+            });
+        });
+
+        //sample data for nodes and edges
+        var nodes = {123: {id: 123, song_name: 'Fireworks', weight: 1, parent: null}, 20: {id: 20, song_name: 'Toxic', weight: 0.8, parent: 123}}
+        
+        var edges = [];
+        for (const [key, value] of Object.entries(nodes)) {
+            if (value.parent) {
+                var newEdge = {source: value.parent, target: parseInt(key), value: 1};
+                edges.push(newEdge);
+            }
+        }
+        console.log(nodes);
+        console.log(edges);
+
+        var width = 1000;
+        var height = 600;
+
+        // force simulation function is not defined,
+        // also there isn't any html element this is being added to.  - Daniel
+        var force = d3.forceSimulation()
+            .nodes(d3.values(nodes))
+            .force("link", d3.forceLink(edges).id(d => d.id).distance(100))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force("x", d3.forceX())
+            .force("y", d3.forceY())
+            .force("charge", d3.forceManyBody().strength(-250))
+            .alphaTarget(1)
+            .on("tick", tick);
+
+        var svg = d3.select("#canvas").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var path = svg.append("g")
+            .selectAll("path")
+            .data(edges)
+            .enter()
+            .append("path")
+            .attr("class", function(d) { return "link " + d.type; });
+
+        var node = svg.selectAll(".node")
+            .data(force.nodes())
+            .enter().append("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+        
+        node.append("circle")
+            .attr("class", "unpinned")
+            .attr("r", 5);
+
+
+        function tick() {
+            path.attr("d", function(d) {
+                var dx = d.target.x - d.source.x,
+                    dy = d.target.y - d.source.y,
+                    // dr = Math.sqrt(dx * dx + dy * dy);
+                    dr = 0;
+                return "M" +
+                    d.source.x + "," +
+                    d.source.y + "A" +
+                    dr + "," + dr + " 0 0,1 " +
+                    d.target.x + "," +
+                    d.target.y;
+            });
+
+            node.attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")"; 
+            });
+        };
+
+        function dragstarted(d) {
+            if (!d3.event.active) force.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+            d3.select(this).select("circle").style("stroke-width", 3);
+        };
+
+        function dragged(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        };
+
+        function dragended(d) {
+            if (!d3.event.active) force.alphaTarget(0);
+            d.fixed = true;
+            if (d.fixed == true) {
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            else {
+                d.fx = null;
+                d.fy = null;
+            }
+        };
+    </script>
 
 
 <body>
