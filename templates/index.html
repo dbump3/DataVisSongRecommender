@@ -198,6 +198,7 @@
                 .attr("class", "node")
                 .on("click", nodeClicked)
                 .on("mouseover", nodeMouseover)
+                .on("mouseout", nodeMouseout)
             
             node.append("circle")
                 .attr("class", "unpinned")
@@ -250,7 +251,16 @@
             };
 
             function nodeMouseover(d) {
-                d3.select(this).style("cursor", "pointer"); 
+                d3.select(this).style("cursor", "pointer")
+                    .transition()
+                    .duration('200')
+                    .attr('opacity', '.7');
+            };
+
+            function nodeMouseout(d) {
+                d3.select(this).transition()
+                    .duration('200')
+                    .attr('opacity', '1');
             };
 
             function getNodeSize(similarity) {
