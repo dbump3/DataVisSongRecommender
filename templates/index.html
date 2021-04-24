@@ -139,8 +139,9 @@
                 .then(kSimilarSongs => {
                     // TODO: turn kSimilarSongs into nodes format
                     var nodes = {};
+                    console.log(kSimilarSongs)
                     kSimilarSongs.forEach(song => {
-                        nodes[song[0]] = {id: song[0], song_name: song[1], weight: song[2], parent: song[3]}
+                        nodes[song[0]] = {id: song[0], song_name: song[1], song_artist: song[2], weight: song[3], parent: song[4]}
                     });
                     buildGraph(nodes)
                 });
@@ -213,7 +214,18 @@
             
             node.append("circle")
                 .attr("class", "unpinned")
-                .attr("r", 5);
+                .attr("r", 20);
+
+            var label = node.append("svg:text")
+                .text(function (d) { return truncateString(d.song_name, 16); });
+
+            function truncateString(str, len) {
+                if (str.length <= len) {
+                    return str;
+                } else {
+                    return str.slice(0, len-3) + '...';
+                }
+            }
 
             function tick() {
                 path.attr("d", function(d) {
