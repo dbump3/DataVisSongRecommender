@@ -143,13 +143,11 @@
 
         function getSongList() {
             var partialSongName = songInput.value;
-            console.log(partialSongName);
             fetch(`/getauto/${partialSongName}`)
                 .then(response => response.json())
                 .then(songList => {
                     $("#songOptions").empty();
                     songList.forEach(song => {
-                        console.log(song);
                         var newOption = document.createElement("option");
                         newOption.value = song;
                         listElem.appendChild(newOption);
