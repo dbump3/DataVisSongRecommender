@@ -19,7 +19,7 @@ def getIndexFromName(songName):
 
 # Given a song ID, get the k most similar songs
 def getKSimilarSongs(songName, k):
-    songId, artists = data[getIndexFromName(songName)][0], data[getIndexFromName(songName)][2]
+    songId, artists = data[getIndexFromName(songName)][0], data[getIndexFromName(songName)][2].strip('][\'').split(', ')
     root = [[songId, songName, artists, 0.0, None]]
     visited.clear()
     visited.add(songId)
@@ -36,7 +36,7 @@ def getKSimilarSongsHelper(songId, k, similarity):
     # get k most similar indexes of songs
     kMostSimlarIndexes = np.argpartition(diff, k)[1:k+1]
 
-    # return array containing k pairs of [songId, songName, similarityRating, parentId]
+    # return array containing k pairs of [songId, songName, artists, similarityRating, parentId]
     songs = (np.column_stack((data[kMostSimlarIndexes][:,0],
                               data[kMostSimlarIndexes][:,1],
                               data[kMostSimlarIndexes][:,2],
@@ -48,6 +48,7 @@ def getKSimilarSongsHelper(songId, k, similarity):
         if song[3] != 0.0 and song[0] not in visited: # if similarity is 0, it's the same song so filter it out
             visited.add(song[0])
             song[3] += similarity # add parents similarity to root
+            song[2] = song[2].strip('][\'').split(', ') # parse string representation of list of artists
             newSongs.append(song)
 
             # recursively add more songs with half as many songs at each step
