@@ -202,7 +202,7 @@
                 .attr("class", "node")
                 .on("click", nodeClicked)
                 .on("mouseover", nodeMouseover)
-                .on("mouseout", nodeMouseout)
+                .on("mouseout", nodeMouseout);
             
             node.append("circle")
                 .attr("class", "unpinned")
@@ -211,6 +211,7 @@
                     const maxRadius = 50;
                     return (maxRadius / (maxRadius + 2 * d.weight)) * (maxRadius-minRadius) + minRadius;
                 })
+                .style("cursor", "pointer")
                 .style("fill", d => {
                     if (d.parent) return "#007bff";
                     else return "white";
@@ -262,18 +263,21 @@
             };
 
             function nodeClicked(d) {
+                if (!d.parent) return;
                 updateSongInput(d.song_name);
                 $('#inputSong').val(d.song_name);
             };
 
             function nodeMouseover(d) {
-                d3.select(this).selectAll("circle").style("cursor", "pointer")
+                if (!d.parent) return;
+                d3.select(this).selectAll("circle")
                     .transition()
                     .duration('200')
                     .style('fill', '#5eacff');
             };
 
             function nodeMouseout(d) {
+                if (!d.parent) return;
                 d3.select(this).selectAll("circle").transition()
                     .duration('200')
                     .style('fill', '#007bff');
