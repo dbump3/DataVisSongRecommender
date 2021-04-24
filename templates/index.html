@@ -48,6 +48,12 @@
         stroke: black;
         stroke-width: 1.5px;
     }
+    .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
 
 
 </style>
@@ -121,13 +127,17 @@
             
         </div>
         <div class="grid-child middle" id="canvas">
-            
-
-            
+            <div class="spinner-container" id="loadingGraph" style="display: none;">
+                <div class="spinner-grow text-primary" style="width: 5rem; height: 5rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
     <script>
         function updateSongInput(songName = null) {
+            d3.select("svg").remove()
+            $('#loadingGraph').show()
             if(!songName) {
                 songName = $('#inputSong').val()
             }
@@ -140,13 +150,12 @@
                     kSimilarSongs.forEach(song => {
                         nodes[song[0]] = {id: song[0], song_name: song[1], song_artist: song[2], weight: song[3], parent: song[4]}
                     });
+                    $('#loadingGraph').hide()
                     buildGraph(nodes)
                 });
         }
         
         function buildGraph(nodes) {
-            d3.select("svg").remove()
-
             var edges = [];
             for (const [key, value] of Object.entries(nodes)) {
                 if (value.parent) {
