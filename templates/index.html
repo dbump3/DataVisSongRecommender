@@ -137,6 +137,19 @@
         </div>
     </div>
     <script>
+        const songInput = document.getElementById("inputSong");
+        songInput.addEventListener("input", getSongList);
+
+        function getSongList() {
+            var partialSongName = songInput.value;
+            console.log(partialSongName);
+            fetch(`/getauto/${partialSongName}`)
+                .then(response => response.json())
+                .then(songList => {
+                    console.log(songList);
+                });
+        }
+
         function updateSongInput(songName = null) {
             d3.select("svg").remove()
             $('#loadingGraph').show()

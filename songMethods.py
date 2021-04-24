@@ -62,7 +62,7 @@ def finishSongName(partialName):
     length = len(partialName)
     sliced_data = slicer_vectorized(song_names_lower, 0, length)
     indices = np.argwhere(sliced_data == partialName)
-    song_names = data[indices][:,0][:,1][:3]
+    song_names = data[indices][:,0][:,1][:8]
     return song_names
 
 def slicer_vectorized(a,start,end):

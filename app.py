@@ -24,5 +24,12 @@ def data_get(song):    # GET request
         print(request.get_json())  # parse as JSON
         return 'Sucesss', 200
 
+@app.route('/getauto/<partialName>', methods=['GET', 'POST'])
+def get_songs(partialName):
+    if request.method == 'GET':
+        return jsonify(finishSongName(partialName))
+    if request.method == 'POST':
+        print(request.get_json())  # parse as JSON
+        return 'Sucesss', 200
 #########  run app  #########
 app.run(debug=True)
