@@ -19,7 +19,7 @@ def home_page():
 @app.route('/getdata/<song>', methods=['GET', 'POST'])
 def data_get(song):    # GET request
     if request.method == 'GET':
-        return jsonify(getKSimilarSongs(song, 4))  # serialize and use JSON headers    # POST request
+        return jsonify(getKSimilarSongs(song, 7))  # serialize and use JSON headers    # POST request
     if request.method == 'POST':
         print(request.get_json())  # parse as JSON
         return 'Sucesss', 200
