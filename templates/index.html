@@ -136,6 +136,10 @@
                     console.log('GET response:');
                     console.log(kSimilarSongs);
                     $('#outputSongs').text(kSimilarSongs);
+                    
+                    // TODO: turn kSimilarSongs into nodes format
+
+                    buildGraph(nodes)
                 });
         }
 
@@ -155,76 +159,78 @@
         });
 
         //sample data for nodes and edges
-        var nodes = {123: {id: 123, song_name: 'Fireworks', weight: 1, parent: null}, 20: {id: 20, song_name: 'Toxic', weight: 0.8, parent: 123}}
+        // var nodes = {123: {id: 123, song_name: 'Fireworks', weight: 1, parent: null}, 20: {id: 20, song_name: 'Toxic', weight: 0.8, parent: 123}}
+        // buildGraph(nodes)
         
-        var edges = [];
-        for (const [key, value] of Object.entries(nodes)) {
-            if (value.parent) {
-                var newEdge = {source: value.parent, target: parseInt(key), value: 1};
-                edges.push(newEdge);
+        function buildGraph(nodes) {
+            d3.select("svg").remove()
+
+            var edges = [];
+            for (const [key, value] of Object.entries(nodes)) {
+                if (value.parent) {
+                    var newEdge = {source: value.parent, target: parseInt(key), value: 1};
+                    edges.push(newEdge);
+                }
             }
+            console.log(nodes);
+            console.log(edges);
+
+            var width = 1000;
+            var height = 600;
+
+            var force = d3.forceSimulation()
+                .nodes(d3.values(nodes))
+                .force("link", d3.forceLink(edges).id(d => d.id).distance(100))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force("x", d3.forceX())
+                .force("y", d3.forceY())
+                .force("charge", d3.forceManyBody().strength(-250))
+                .alphaTarget(1)
+                .on("tick", tick);
+
+            var svg = d3.select("#canvas").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            var path = svg.append("g")
+                .selectAll("path")
+                .data(edges)
+                .enter()
+                .append("path")
+                .attr("class", function(d) { return "link " + d.type; });
+
+            var node = svg.selectAll(".node")
+                .data(force.nodes())
+                .enter().append("g")
+                .attr("class", "node")
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+            
+            node.append("circle")
+                .attr("class", "unpinned")
+                .attr("r", 5);
+
+            function tick() {
+                path.attr("d", function(d) {
+                    var dx = d.target.x - d.source.x,
+                        dy = d.target.y - d.source.y,
+                        // dr = Math.sqrt(dx * dx + dy * dy);
+                        dr = 0;
+                    return "M" +
+                        d.source.x + "," +
+                        d.source.y + "A" +
+                        dr + "," + dr + " 0 0,1 " +
+                        d.target.x + "," +
+                        d.target.y;
+                });
+
+                node.attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")"; 
+                });
+            };
         }
-        console.log(nodes);
-        console.log(edges);
-
-        var width = 1000;
-        var height = 600;
-
-        // force simulation function is not defined,
-        // also there isn't any html element this is being added to.  - Daniel
-        var force = d3.forceSimulation()
-            .nodes(d3.values(nodes))
-            .force("link", d3.forceLink(edges).id(d => d.id).distance(100))
-            .force('center', d3.forceCenter(width / 2, height / 2))
-            .force("x", d3.forceX())
-            .force("y", d3.forceY())
-            .force("charge", d3.forceManyBody().strength(-250))
-            .alphaTarget(1)
-            .on("tick", tick);
-
-        var svg = d3.select("#canvas").append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        var path = svg.append("g")
-            .selectAll("path")
-            .data(edges)
-            .enter()
-            .append("path")
-            .attr("class", function(d) { return "link " + d.type; });
-
-        var node = svg.selectAll(".node")
-            .data(force.nodes())
-            .enter().append("g")
-            .attr("class", "node")
-            .call(d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended));
-        
-        node.append("circle")
-            .attr("class", "unpinned")
-            .attr("r", 5);
-
-
-        function tick() {
-            path.attr("d", function(d) {
-                var dx = d.target.x - d.source.x,
-                    dy = d.target.y - d.source.y,
-                    // dr = Math.sqrt(dx * dx + dy * dy);
-                    dr = 0;
-                return "M" +
-                    d.source.x + "," +
-                    d.source.y + "A" +
-                    dr + "," + dr + " 0 0,1 " +
-                    d.target.x + "," +
-                    d.target.y;
-            });
-
-            node.attr("transform", function(d) {
-                return "translate(" + d.x + "," + d.y + ")"; 
-            });
-        };
 
         function dragstarted(d) {
             if (!d3.event.active) force.alphaTarget(0.3).restart();
