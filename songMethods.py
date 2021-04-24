@@ -18,10 +18,10 @@ def getIndexFromName(songName):
 # Given a song ID, get the k most similar songs
 def getKSimilarSongs(songName, k):
     songId = data[getIndexFromName(songName)][0]
-    root = [[songId, songName, 1, None]]
-    return root + getKSimilarSongsHelper(songId, k)
+    root = [[songId, songName, 0.0, None]]
+    return root + getKSimilarSongsHelper(songId, k, 0)
     
-def getKSimilarSongsHelper(songId, k):
+def getKSimilarSongsHelper(songId, k, similarity):
     # create new array with input song
     inputSong = np.expand_dims(data[getIndexFromId(songId)], axis=0)
 
@@ -38,15 +38,19 @@ def getKSimilarSongsHelper(songId, k):
                               diff[kMostSimlarIndexes],
                               [songId]*len(kMostSimlarIndexes)))).tolist()
 
-    # recursively add more songs with half as many songs at each step
-    newK = k // 2
-    if newK > 1:
-        newSongs = []
-        for song in songs:
-            newSongs += getKSimilarSongsHelper(song[0], newK)
-        songs += newSongs
+    newSongs = []
+    for song in songs:
+        if song[2] != 0.0: # if similarity is 0, it's the same song so filter it out
+            print(song[2])
+            song[2] += similarity # add parents similarity to root
+            newSongs.append(song)
 
-    return songs 
+            # recursively add more songs with half as many songs at each step
+            newK = k // 2
+            if newK > 1:
+                newSongs += getKSimilarSongsHelper(song[0], newK, song[2]) # add children
+
+    return newSongs 
 
 # sample input:
-print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))
+# print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))
