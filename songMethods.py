@@ -69,6 +69,6 @@ def slicer_vectorized(a,start,end):
     return np.array(b).view((str,end-start)).flatten()
 
 
-print(finishSongName("car")
+# print(finishSongName("car"))
 # sample input:
 # print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))
