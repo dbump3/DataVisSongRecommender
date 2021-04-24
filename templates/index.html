@@ -130,9 +130,9 @@
                 </div>
             </div>
         </div>
-        <div class="grid-child right" style="background-color: lightgray;">
+        <div class="grid-child right">
             <div class="center-container">
-                <p style="color: gray">selected song info</p>
+                <iframe id="spotifyWidget" width="300px" height="380px" frameborder="5" allowtransparency="true" allow="encrypted-media"></iframe>
             </div>
         </div>
     </div>
@@ -143,6 +143,19 @@
             if(!songName) {
                 songName = $('#inputSong').val()
             }
+
+            // get id from input and create spotify widget
+            fetch(`/getsongid/${songName}`)
+                .then(response => response.json())
+                .then(songId => {
+                    spotifyLink = "https://open.spotify.com/embed/track/" + songId
+                    $('#spotifyWidget').attr("src", spotifyLink)
+                })
+                .catch(function() {
+                    console.log("Error finding song: " + songName);
+                });
+
+            // get similar songs and build graph
             fetch(`/getdata/${songName}`)
                 .then(response => response.json())
                 .then(kSimilarSongs => {

@@ -2,7 +2,7 @@
 
 ########  imports  ##########
 from flask import Flask, jsonify, request, render_template
-from songMethods import getKSimilarSongs
+from songMethods import getIdFromName, getKSimilarSongs
 app = Flask(__name__)
 
 #############################
@@ -16,12 +16,20 @@ app = Flask(__name__)
 def home_page():
     return render_template('index.html')
 
-@app.route('/getdata/<song>', methods=['GET', 'POST'])
-def data_get(song):    # GET request
-    if request.method == 'GET':
-        return jsonify(getKSimilarSongs(song, 7))  # serialize and use JSON headers    # POST request
-    if request.method == 'POST':
-        print(request.get_json())  # parse as JSON
+@app.route('/getdata/<songName>', methods=['GET', 'POST'])
+def data_get(songName):
+    if request.method == 'GET': # GET request
+        return jsonify(getKSimilarSongs(songName, 7)) # serialize and use JSON headers
+    if request.method == 'POST': # POST request
+        print(request.get_json()) # parse as JSON
+        return 'Sucesss', 200
+
+@app.route('/getsongid/<songName>', methods=['GET', 'POST'])
+def song_id_get(songName):
+    if request.method == 'GET': # GET request
+        return jsonify(getIdFromName(songName)) # serialize and use JSON headers
+    if request.method == 'POST': # POST request
+        print(request.get_json()) # parse as JSON
         return 'Sucesss', 200
 
 #########  run app  #########
