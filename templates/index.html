@@ -305,20 +305,27 @@
                         word,
                         line = [],
                         lineNumber = 0,
-                        lineHeight = 1, // ems
+                        lineHeight = 1.8, // ch
+                        amount = 0,
                         y = text.attr("y"),
                         dy = parseFloat(text.attr("dy"));
                     if (words.length <= 1) { return; } 
                     var tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "ch");
                     console.log(words);
+                    var size = 0;
                     while (word = words.pop()) {
                         line.push(word);
+                        size += 1;
                         tspan.text(line.join(" "));
-                        if (tspan.node().getComputedTextLength() > width) {
+                        if (tspan.node().getComputedTextLength() > width && size > 1) {
                             line.pop();
+                            size -= 1;
+                            if (lineNumber == 0) 
+                                lineNumber++;
                             tspan.text(line.join(" "));
                             line = [word];
-                            tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                            tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", lineNumber * lineHeight + dy + "ch").text(word);
+                            amount++;
                         }
                     }
                 });
