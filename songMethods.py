@@ -17,6 +17,10 @@ def getIndexFromId(songId):
 def getIndexFromName(songName):
     return np.argwhere(data[:,1] == songName)[0][0]
 
+# Given a song name, get the id of the song in data
+def getIdFromName(songName):
+    return data[getIndexFromName(songName)][0]
+
 # Given a song ID, get the k most similar songs
 def getKSimilarSongs(songName, k):
     songId, artists = data[getIndexFromName(songName)][0], data[getIndexFromName(songName)][2].strip('][\'').split(', ')
