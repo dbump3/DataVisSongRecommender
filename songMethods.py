@@ -11,9 +11,14 @@ data = np.array(raw_data[['id', 'name', 'acousticness', 'danceability', 'energy'
 def getIndexFromId(songId):
     return np.argwhere(data[:,0] == songId)[0][0]
 
+# Given a song name, get the index of the song in data
+def getIndexFromName(songName):
+    return np.argwhere(data[:,1] == songName)[0][0]
+
 # Given a song ID, get the k most similar songs
-def getKSimilarSongs(songId, k):
-    root = [[songId, data[getIndexFromId(songId)][1], 1, None]]
+def getKSimilarSongs(songName, k):
+    songId = data[getIndexFromName(songName)][0]
+    root = [[songId, songName, 1, None]]
     return root + getKSimilarSongsHelper(songId, k)
     
 def getKSimilarSongsHelper(songId, k):
@@ -44,4 +49,4 @@ def getKSimilarSongsHelper(songId, k):
     return songs 
 
 # sample input:
-# print(getKSimilarSongs("35iwgR4jXetI318WEWsa1Q", 4))
+print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))

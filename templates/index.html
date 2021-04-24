@@ -75,7 +75,6 @@
                     <div style="width:5px"></div> <!-- This is to put space between the input box and button -->
                     <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
                 </div>
-                <p id="outputSongs"></p>
                 <ul class="list-group" id="song-list"></ul>
             </form>
 
@@ -139,7 +138,6 @@
                 .then(kSimilarSongs => {
                     console.log('GET response:');
                     console.log(kSimilarSongs);
-                    $('#outputSongs').text(kSimilarSongs);
                     
                     // TODO: turn kSimilarSongs into nodes format
 
