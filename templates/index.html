@@ -126,9 +126,11 @@
         </div>
     </div>
     <script>
-        function updateSongInput() {
-            songId = $('#inputSong').val()
-            fetch(`/getdata/${songId}`)
+        function updateSongInput(songName = null) {
+            if(!songName) {
+                songName = $('#inputSong').val()
+            }
+            fetch(`/getdata/${songName}`)
                 .then(response => response.json())
                 .then(kSimilarSongs => {
                     // turn kSimilarSongs into nodes format
@@ -182,10 +184,7 @@
                 .data(force.nodes())
                 .enter().append("g")
                 .attr("class", "node")
-                .call(d3.drag()
-                    .on("start", dragstarted)
-                    .on("drag", dragged)
-                    .on("end", dragended));
+                .on("click", nodeClicked)
             
             node.append("circle")
                 .attr("class", "unpinned")
@@ -220,32 +219,12 @@
                     return "translate(" + d.x + "," + d.y + ")"; 
                 });
             };
+
+            function nodeClicked(d) {
+                updateSongInput(d.song_name);
+                $('#inputSong').val(d.song_name);
+            }
         }
-
-        function dragstarted(d) {
-            if (!d3.event.active) force.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-            d3.select(this).select("circle").style("stroke-width", 3);
-        };
-
-        function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
-        };
-
-        function dragended(d) {
-            if (!d3.event.active) force.alphaTarget(0);
-            d.fixed = true;
-            if (d.fixed == true) {
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-            else {
-                d.fx = null;
-                d.fy = null;
-            }
-        };
     </script>
 
 
