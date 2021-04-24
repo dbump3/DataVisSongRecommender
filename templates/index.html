@@ -168,8 +168,8 @@
             console.log(nodes);
             console.log(edges);
 
-            var width = window.innerWidth * 0.65;
-            var height = window.innerHeight * 0.90;
+            var width = $("#canvas").width()
+            var height = $("#canvas").height()
 
             var force = d3.forceSimulation()
                 .nodes(d3.values(nodes))
