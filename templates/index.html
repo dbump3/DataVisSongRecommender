@@ -19,7 +19,7 @@
     }
     .liked-songs {
         display: flex;
-        height: 30vh;
+        height: 40vh;
         flex-direction: column;
         justify-content: flex-start;
     }
@@ -32,7 +32,7 @@
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
-        height: 30vh;
+        height: 40vh;
     }
     .slider {
         width: 80%;
@@ -61,6 +61,7 @@
 
 <!-- Body  -->
 <body>
+    <h1 style="text-align:center;height:5vh;"> Song Recommender </h1>
     <div class="main-grid">
         <div class="grid-child left">
             <!-- <div class="form-group">
@@ -125,7 +126,7 @@
             
         </div>
         <div class="grid-child middle" id="canvas">
-            <h1> Song Recommender </h1>
+            
 
             
         </div>
@@ -134,13 +135,13 @@
         function updateSongInput() {
             songId = $('#inputSong').val()
             fetch(`/getdata/${songId}`)
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(kSimilarSongs => {
-                    console.log('GET response:');
-                    console.log(kSimilarSongs);
-                    
                     // TODO: turn kSimilarSongs into nodes format
-
+                    var nodes = {};
+                    kSimilarSongs.forEach(song => {
+                        nodes[song[0]] = {id: song[0], song_name: song[1], weight: song[2], parent: song[3]}
+                    });
                     buildGraph(nodes)
                 });
         }
@@ -170,7 +171,7 @@
             var edges = [];
             for (const [key, value] of Object.entries(nodes)) {
                 if (value.parent) {
-                    var newEdge = {source: value.parent, target: parseInt(key), value: 1};
+                    var newEdge = {source: value.parent, target: key};
                     edges.push(newEdge);
                 }
             }
