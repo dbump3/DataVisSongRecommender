@@ -152,6 +152,7 @@
                     buildGraph(nodes)
                 })
                 .catch(function() {
+                    $('#loadingGraph').hide()
                     console.log("Error finding song: " + songName);
                 });
         }
@@ -207,16 +208,19 @@
                     const maxRadius = 50;
                     return (maxRadius / (maxRadius + 2 * d.weight)) * (maxRadius-minRadius) + minRadius;
                 })
-                .style("fill", "#01bef0")
-                .style("stroke", "blue");
+                .style("fill", "#007bff")
+                .style("stroke-width", "0");
 
             var label = node.append("svg:text")
                 .text(function (d) { return truncateString(d.song_name, 20); })
+                .attr("dy", "0")
                 .style("font", "14px sans-serif")
                 .style("font-weight", "bold")
                 .style("stroke-width", "0")
                 .style("fill", "#000")
-                .style('text-anchor', 'middle');
+                .style('text-anchor', 'middle')
+                .style('alignment-baseline', 'middle')
+                .call(wrap, 80);
 
             function truncateString(str, len) {
                 if (str.length <= len) {
@@ -251,21 +255,47 @@
             };
 
             function nodeMouseover(d) {
-                d3.select(this).style("cursor", "pointer")
+                d3.select(this).selectAll("circle").style("cursor", "pointer")
                     .transition()
                     .duration('200')
-                    .attr('opacity', '.7');
+                    .style('fill', '#5eacff');
             };
 
             function nodeMouseout(d) {
-                d3.select(this).transition()
+                d3.select(this).selectAll("circle").transition()
                     .duration('200')
-                    .attr('opacity', '1');
+                    .style('fill', '#007bff');
             };
 
             function getNodeSize(similarity) {
                 const minSize = 10;
                 const maxSize = 50;
+            }
+
+            function wrap(text, width) {
+                text.each(function() {
+                    var text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        lineHeight = 1, // ems
+                        y = text.attr("y"),
+                        dy = parseFloat(text.attr("dy"));
+                    if (words.length <= 2) { return; } 
+                    var tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "ch");
+                    console.log(words);
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+                        }
+                    }
+                });
             }
         }
     </script>
