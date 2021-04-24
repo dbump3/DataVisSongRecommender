@@ -43,8 +43,6 @@
         stroke-width: 1.5px;
     }
     .node {
-        fill: #ccc;
-        stroke: #fff;
         stroke: black;
         stroke-width: 1.5px;
     }
@@ -152,6 +150,9 @@
                     });
                     $('#loadingGraph').hide()
                     buildGraph(nodes)
+                })
+                .catch(function() {
+                    console.log("Error finding song: " + songName);
                 });
         }
         
