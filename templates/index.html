@@ -11,22 +11,27 @@
 
 <!-- CSS styling  -->
 <style>
-    .grid-container {
+    .main-grid {
         display: grid;
-        grid-template-columns: 35vw 65vw;
+        grid-template-columns: 24vw 65vw;
         grid-gap: 1vw;
+        padding: 5px 5px 5px 5px;
+    }
+    .liked-songs {
+        display: flex;
+        height: 30vh;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    .slider-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 30vh;
     }
     .slider {
         width: 80%;
-    }
-    .attr1{
-        color: #060558;
-    }
-    .attr2{
-        color: #064da6;
-    }
-    .attr3{
-        color: #01bef0;
     }
     path.link {
         fill: none;
@@ -52,7 +57,7 @@
 
 <!-- Body  -->
 <body>
-    <div class="grid-container">
+    <div class="main-grid">
         <div class="grid-child left">
             <!-- <div class="form-group">
                 <label>Languages</label>
@@ -60,47 +65,60 @@
             </div> -->
 
             <!-- TODO: add autocomplete -->
-            <form class="form-inline">
+            <form class="liked-songs">
                 <div class="form-group mx-sm-3 mb-2">
                     <label for="inputSong" class="sr-only">Song Name</label>
                     <input class="form-control" id="inputSong" placeholder="Song Name">
+                    <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
                 </div>
-                <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
+                <ul class="list-group" id="song-list"></ul>
             </form>
 
-
-            <div class= slider>
-                <label class = attr1>Attribute 1 Slider</label>
-                <div class="d-flex justify-content-center my-4">
-                    <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-                    <form class="range-field w-100">
-                        <input class="border-0" type="range" min="0" max="100" />
-                    </form>
-                    <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+            <div class="slider-container">
+                <div class="slider-text" style="text-align:center">
+                    <h3>Similarity Weights</h3>
+                    <p>
+                        These sliders represent how similar each feature will be in the recommended songs
+                    </p>
+                </div>
+                <div class="slider">
+                    <label class ="attr" style="color:#060558">
+                        Popularity
+                    </label>
+                    <div class="d-flex align-items-center my-2">
+                        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+                        <form class="range-field w-100">
+                            <input class="border-0" type="range" min="0" max="100" />
+                        </form>
+                        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                    </div>
+                </div>
+                <div class="slider">
+                    <label class="attr" style="color:#064da6">
+                        Release Date
+                    </label>
+                    <div class="d-flex align-items-center my-2">
+                        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+                        <form class="range-field w-100">
+                            <input class="border-0" type="range" min="0" max="100" />
+                        </form>
+                        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                    </div>
+                </div>
+                <div class="slider">
+                    <label class ="attr" style="color:#01bef0">
+                        Danceability
+                    </label>
+                    <div class="d-flex align-items-center my-2">
+                        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
+                        <form class="range-field w-100 ">
+                            <input type="range" min="0" max="100" />
+                        </form>
+                        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                    </div>
                 </div>
             </div>
-
-            <div class= slider>
-                <label class=attr2>Attribute 2 Slider</label>
-                <div class="d-flex justify-content-center my-4">
-                    <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-                    <form class="range-field w-100">
-                        <input class="border-0" type="range" min="0" max="100" />
-                    </form>
-                    <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
-                </div>
-            </div>
-
-            <div class= slider>
-                <label class = attr3>Attribute 3 Slider</label>
-                <div class="d-flex justify-content-center my-4">
-                    <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-                    <form class="range-field w-100">
-                        <input class="border-0" type="range" min="0" max="100" />
-                    </form>
-                    <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
-                </div>
-            </div>
+            
         </div>
         <div class="grid-child middle" id="canvas">
             <h1> Song Recommender </h1>
