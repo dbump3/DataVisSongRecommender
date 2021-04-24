@@ -5,6 +5,7 @@ import scipy.spatial
 # read data
 raw_data = pd.read_csv('data/tracks.csv')
 data = np.array(raw_data[['id', 'name', 'artists', 'acousticness', 'danceability', 'energy', 'duration_ms', 'instrumentalness', 'valence', 'popularity', 'tempo', 'liveness', 'loudness', 'speechiness']])
+song_names_lower = np.char.lower(np.array(data[:,1], dtype=str))
 visited = set()
 
 
@@ -56,5 +57,18 @@ def getKSimilarSongsHelper(songId, k, similarity):
 
     return newSongs 
 
+def finishSongName(partialName):
+    length = len(partialName)
+    sliced_data = slicer_vectorized(song_names_lower, 0, length)
+    indices = np.argwhere(sliced_data == partialName)
+    song_names = data[indices][:,0][:,1][:3]
+    return song_names
+
+def slicer_vectorized(a,start,end):
+    b = a.view((str,1)).reshape(len(a),-1)[:,start:end]
+    return np.array(b).view((str,end-start)).flatten()
+
+import sys
+print(finishSongName(sys.argv[1]))
 # sample input:
 # print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))
