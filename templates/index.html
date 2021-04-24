@@ -65,12 +65,6 @@
     <h1 style="text-align:center;height:5vh;"> Song Recommender </h1>
     <div class="main-grid">
         <div class="grid-child left">
-            <!-- <div class="form-group">
-                <label>Languages</label>
-                <input class="form-control autocomplete" placeholder="Enter a song" />
-            </div> -->
-
-            <!-- TODO: add autocomplete -->
             <form class="liked-songs">
                 <div class="form-group mx-sm-3 mb-2" id="song-search">
                     <input class="form-control" id="inputSong" placeholder="Song Name">
@@ -133,12 +127,14 @@
         </div>
     </div>
     <script>
-        function updateSongInput() {
-            songId = $('#inputSong').val()
-            fetch(`/getdata/${songId}`)
+        function updateSongInput(songName = null) {
+            if(!songName) {
+                songName = $('#inputSong').val()
+            }
+            fetch(`/getdata/${songName}`)
                 .then(response => response.json())
                 .then(kSimilarSongs => {
-                    // TODO: turn kSimilarSongs into nodes format
+                    // turn kSimilarSongs into nodes format
                     var nodes = {};
                     console.log(kSimilarSongs)
                     kSimilarSongs.forEach(song => {
@@ -147,25 +143,6 @@
                     buildGraph(nodes)
                 });
         }
-
-        // for autocomplete
-        $(function() {
-            // TODO load from a file containing track names instead of these placeholders
-            var availableTags = [
-                "ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++",
-                "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran",
-                "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl",
-                "PHP", "Python", "Ruby", "Scala", "Scheme"
-            ];
-
-            $(".autocomplete").autocomplete({
-                source: availableTags
-            });
-        });
-
-        //sample data for nodes and edges
-        // var nodes = {123: {id: 123, song_name: 'Fireworks', weight: 1, parent: null}, 20: {id: 20, song_name: 'Toxic', weight: 0.8, parent: 123}}
-        // buildGraph(nodes)
         
         function buildGraph(nodes) {
             d3.select("svg").remove()
@@ -208,10 +185,7 @@
                 .data(force.nodes())
                 .enter().append("g")
                 .attr("class", "node")
-                .call(d3.drag()
-                    .on("start", dragstarted)
-                    .on("drag", dragged)
-                    .on("end", dragended));
+                .on("click", nodeClicked)
             
             node.append("circle")
                 .attr("class", "unpinned")
@@ -274,9 +248,12 @@
                     d.fy = null;
                 }
             };
-        }
-
         
+            function nodeClicked(d) {
+                updateSongInput(d.song_name);
+                $('#inputSong').val(d.song_name);
+            };
+        }
     </script>
 
 
