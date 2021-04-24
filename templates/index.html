@@ -37,9 +37,6 @@
     .slider {
         width: 80%;
     }
-    .attr {
-        color: #007bff;
-    }
     path.link {
         fill: none;
         stroke: #666;
@@ -176,11 +173,11 @@
 
             var force = d3.forceSimulation()
                 .nodes(d3.values(nodes))
-                .force("link", d3.forceLink(edges).id(d => d.id).distance(100))
+                .force("link", d3.forceLink(edges).id(d => d.id).distance(150))
                 .force('center', d3.forceCenter(width / 2, height / 2))
                 .force("x", d3.forceX())
                 .force("y", d3.forceY())
-                .force("charge", d3.forceManyBody().strength(-300))
+                .force("charge", d3.forceManyBody().strength(-600))
                 .alphaTarget(1)
                 .on("tick", tick);
 
@@ -207,20 +204,16 @@
             node.append("circle")
                 .attr("class", "unpinned")
                 .attr("r", function(d) {
-                    const minRadius = 10;
-                    const maxRadius = 50;
+                    const minRadius = 25;
+                    const maxRadius = 60;
                     return (maxRadius / (maxRadius + 2 * d.weight)) * (maxRadius-minRadius) + minRadius;
                 })
                 .style("cursor", "pointer")
                 .style("fill", d => {
-                    if (d.parent) return "#007bff";
-                    else return "white";
+                    if (!d.parent) return "#007bff";
+                    else return "#5eacff";
                 })
-                .style("stroke-width", d => {
-                    if (node.parent) return "0";
-                    else return "3";
-                })
-                .style("stroke", "#007bff");
+                .style("stroke-width", "0");
 
             var label = node.append("svg:text")
                 .text(function (d) { return truncateString(d.song_name, 20); })
@@ -273,19 +266,19 @@
                 d3.select(this).selectAll("circle")
                     .transition()
                     .duration('200')
-                    .style('fill', '#5eacff');
+                    .style('fill', '#007bff');
             };
 
             function nodeMouseout(d) {
                 if (!d.parent) return;
                 d3.select(this).selectAll("circle").transition()
                     .duration('200')
-                    .style('fill', '#007bff');
+                    .style('fill', '#5eacff');
             };
 
             function getNodeSize(similarity) {
-                const minSize = 10;
-                const maxSize = 50;
+                const minSize = 30;
+                const maxSize = 70;
             }
 
             function wrap(text, width) {
