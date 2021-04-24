@@ -20,7 +20,8 @@ def getIndexFromName(songName):
 def getKSimilarSongs(songName, k):
     songId, artists = data[getIndexFromName(songName)][0], data[getIndexFromName(songName)][2]
     root = [[songId, songName, artists, 0.0, None]]
-    visited = {songId}
+    visited.clear()
+    visited.add(songId)
     return root + getKSimilarSongsHelper(songId, k, 0)
     
 def getKSimilarSongsHelper(songId, k, similarity):
