@@ -284,7 +284,7 @@
                         lineHeight = 1, // ems
                         y = text.attr("y"),
                         dy = parseFloat(text.attr("dy"));
-                    if (words.length <= 2) { return; } 
+                    if (words.length <= 1) { return; } 
                     var tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "ch");
                     console.log(words);
                     while (word = words.pop()) {
