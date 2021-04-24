@@ -13,9 +13,9 @@
 <style>
     .main-grid {
         display: grid;
-        grid-template-columns: 24vw 65vw;
+        grid-template-columns: 24vw 48vw 24vw;
         grid-gap: 1vw;
-        padding: 5px 5px 5px 5px;
+        padding: 1vh 1vw;
     }
     .liked-songs {
         display: flex;
@@ -46,7 +46,7 @@
         stroke: black;
         stroke-width: 1.5px;
     }
-    .spinner-container {
+    .center-container {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -122,13 +122,17 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         <div class="grid-child middle" id="canvas">
-            <div class="spinner-container" id="loadingGraph" style="display: none;">
+            <div class="center-container" id="loadingGraph" style="display: none;">
                 <div class="spinner-grow text-primary" style="width: 5rem; height: 5rem;" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
+            </div>
+        </div>
+        <div class="grid-child right" style="background-color: lightgray;">
+            <div class="center-container">
+                <p style="color: gray">selected song info</p>
             </div>
         </div>
     </div>
