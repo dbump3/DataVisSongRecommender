@@ -63,6 +63,7 @@ def getKSimilarSongsHelper(songId, k, similarity):
     return newSongs 
 
 def finishSongName(partialName):
+    partialName = partialName.lower()
     length = len(partialName)
     sliced_data = slicer_vectorized(song_names_lower, 0, length)
     indices = np.argwhere(sliced_data == partialName)
