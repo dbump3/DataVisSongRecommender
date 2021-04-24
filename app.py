@@ -2,7 +2,7 @@
 
 ########  imports  ##########
 from flask import Flask, jsonify, request, render_template
-from songMethods import getIdFromName, getKSimilarSongs
+from songMethods import getIdFromName, getKSimilarSongs, finishSongName
 app = Flask(__name__)
 
 #############################
