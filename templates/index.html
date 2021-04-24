@@ -23,6 +23,10 @@
         flex-direction: column;
         justify-content: flex-start;
     }
+    #song-search {
+        display: flex;
+        flex-direction: row;
+    }
     .slider-container {
         display: flex;
         flex-direction: column;
@@ -66,9 +70,9 @@
 
             <!-- TODO: add autocomplete -->
             <form class="liked-songs">
-                <div class="form-group mx-sm-3 mb-2">
-                    <label for="inputSong" class="sr-only">Song Name</label>
+                <div class="form-group mx-sm-3 mb-2" id="song-search">
                     <input class="form-control" id="inputSong" placeholder="Song Name">
+                    <div style="width:5px"></div> <!-- This is to put space between the input box and button -->
                     <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
                 </div>
                 <p id="outputSongs"></p>
