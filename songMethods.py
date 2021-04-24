@@ -4,7 +4,8 @@ import scipy.spatial
 
 # read data
 raw_data = pd.read_csv('data/tracks.csv')
-data = np.array(raw_data[['id', 'name', 'acousticness', 'danceability', 'energy', 'duration_ms', 'instrumentalness', 'valence', 'popularity', 'tempo', 'liveness', 'loudness', 'speechiness']])
+data = np.array(raw_data[['id', 'name', 'artists', 'acousticness', 'danceability', 'energy', 'duration_ms', 'instrumentalness', 'valence', 'popularity', 'tempo', 'liveness', 'loudness', 'speechiness']])
+visited = set()
 
 
 # Given a song ID, get the index of the song in data
@@ -17,8 +18,9 @@ def getIndexFromName(songName):
 
 # Given a song ID, get the k most similar songs
 def getKSimilarSongs(songName, k):
-    songId = data[getIndexFromName(songName)][0]
-    root = [[songId, songName, 0.0, None]]
+    songId, artists = data[getIndexFromName(songName)][0], data[getIndexFromName(songName)][2]
+    root = [[songId, songName, artists, 0.0, None]]
+    visited = {songId}
     return root + getKSimilarSongsHelper(songId, k, 0)
     
 def getKSimilarSongsHelper(songId, k, similarity):
@@ -27,7 +29,7 @@ def getKSimilarSongsHelper(songId, k, similarity):
 
     # get distance between input song and all other songs
     # note that the first column (id) is cut off since it is a string
-    diff = scipy.spatial.distance.cdist(inputSong[:,2:], data[:,2:], metric='euclidean')[0]
+    diff = scipy.spatial.distance.cdist(inputSong[:,3:], data[:,3:], metric='euclidean')[0]
     
     # get k most similar indexes of songs
     kMostSimlarIndexes = np.argpartition(diff, k)[1:k+1]
@@ -35,20 +37,21 @@ def getKSimilarSongsHelper(songId, k, similarity):
     # return array containing k pairs of [songId, songName, similarityRating, parentId]
     songs = (np.column_stack((data[kMostSimlarIndexes][:,0],
                               data[kMostSimlarIndexes][:,1],
+                              data[kMostSimlarIndexes][:,2],
                               diff[kMostSimlarIndexes],
                               [songId]*len(kMostSimlarIndexes)))).tolist()
 
     newSongs = []
     for song in songs:
-        if song[2] != 0.0: # if similarity is 0, it's the same song so filter it out
-            print(song[2])
-            song[2] += similarity # add parents similarity to root
+        if song[3] != 0.0 and song[0] not in visited: # if similarity is 0, it's the same song so filter it out
+            visited.add(song[0])
+            song[3] += similarity # add parents similarity to root
             newSongs.append(song)
 
             # recursively add more songs with half as many songs at each step
             newK = k // 2
             if newK > 1:
-                newSongs += getKSimilarSongsHelper(song[0], newK, song[2]) # add children
+                newSongs += getKSimilarSongsHelper(song[0], newK, song[3]) # add children
 
     return newSongs 
 
