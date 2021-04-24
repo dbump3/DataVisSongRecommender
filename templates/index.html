@@ -179,7 +179,8 @@
                 .data(edges)
                 .enter()
                 .append("path")
-                .attr("class", function(d) { return "link " + d.type; });
+                .attr("class", function(d) { return "link " + d.type; })
+                .style("stroke-width", "3px");
 
             var node = svg.selectAll(".node")
                 .data(force.nodes())
@@ -189,7 +190,13 @@
             
             node.append("circle")
                 .attr("class", "unpinned")
-                .attr("r", 20);
+                .attr("r", function(d) {
+                    const minRadius = 10;
+                    const maxRadius = 50;
+                    return (maxRadius / (maxRadius + 2 * d.weight)) * (maxRadius-minRadius) + minRadius;
+                })
+                .style("fill", "#01bef0")
+                .style("stroke", "blue");
 
             var label = node.append("svg:text")
                 .text(function (d) { return truncateString(d.song_name, 20); })
@@ -230,6 +237,11 @@
                 updateSongInput(d.song_name);
                 $('#inputSong').val(d.song_name);
             };
+
+            function getNodeSize(similarity) {
+                const minSize = 10;
+                const maxSize = 50;
+            }
         }
     </script>
 
