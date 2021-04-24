@@ -49,6 +49,7 @@
         stroke-width: 1.5px;
     }
 
+
 </style>
 
 <html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
@@ -217,7 +218,10 @@
                 .attr("r", 20);
 
             var label = node.append("svg:text")
-                .text(function (d) { return truncateString(d.song_name, 20); });
+                .text(function (d) { return truncateString(d.song_name, 20); })
+                .style('font-weight', 300)
+                .style("font", "14px sans-serif")
+                .style('text-anchor', 'middle');
 
             function truncateString(str, len) {
                 if (str.length <= len) {
@@ -245,32 +249,34 @@
                     return "translate(" + d.x + "," + d.y + ")"; 
                 });
             };
-        }
 
-        function dragstarted(d) {
-            if (!d3.event.active) force.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-            d3.select(this).select("circle").style("stroke-width", 3);
-        };
-
-        function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
-        };
-
-        function dragended(d) {
-            if (!d3.event.active) force.alphaTarget(0);
-            d.fixed = true;
-            if (d.fixed == true) {
+            function dragstarted(d) {
+                if (!d3.event.active) force.alphaTarget(0.3).restart();
                 d.fx = d.x;
                 d.fy = d.y;
-            }
-            else {
-                d.fx = null;
-                d.fy = null;
-            }
-        };
+                d3.select(this).select("circle").style("stroke-width", 3);
+            };
+
+            function dragged(d) {
+                d.fx = d3.event.x;
+                d.fy = d3.event.y;
+            };
+
+            function dragended(d) {
+                if (!d3.event.active) force.alphaTarget(0);
+                d.fixed = true;
+                if (d.fixed == true) {
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
+                else {
+                    d.fx = null;
+                    d.fy = null;
+                }
+            };
+        }
+
+        
     </script>
 
 
