@@ -71,11 +71,11 @@
         <div class="grid-child left">
             <form class="liked-songs">
                 <div class="form-group mx-sm-3 mb-2" id="song-search">
-                    <input class="form-control" id="inputSong" placeholder="Song Name">
+                    <input class="form-control" list="songOptions" id="inputSong" placeholder="Song Name">
+                    <datalist id="songOptions"></datalist>
                     <div style="width:5px"></div> <!-- This is to put space between the input box and button -->
                     <button type="button" class="btn btn-primary mb-2" onclick="updateSongInput()">Update Song</button>
                 </div>
-                <ul class="list-group" id="song-list"></ul>
             </form>
 
             <div class="slider-container">
@@ -139,6 +139,7 @@
     <script>
         const songInput = document.getElementById("inputSong");
         songInput.addEventListener("input", getSongList);
+        const listElem = document.getElementById("songOptions");
 
         function getSongList() {
             var partialSongName = songInput.value;
@@ -146,7 +147,13 @@
             fetch(`/getauto/${partialSongName}`)
                 .then(response => response.json())
                 .then(songList => {
-                    console.log(songList);
+                    $("#songOptions").empty();
+                    songList.forEach(song => {
+                        console.log(song);
+                        var newOption = document.createElement("option");
+                        newOption.value = song;
+                        listElem.appendChild(newOption);
+                    });
                 });
         }
 
