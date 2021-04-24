@@ -211,8 +211,15 @@
                     const maxRadius = 50;
                     return (maxRadius / (maxRadius + 2 * d.weight)) * (maxRadius-minRadius) + minRadius;
                 })
-                .style("fill", "#007bff")
-                .style("stroke-width", "0");
+                .style("fill", d => {
+                    if (d.parent) return "#007bff";
+                    else return "white";
+                })
+                .style("stroke-width", d => {
+                    if (node.parent) return "0";
+                    else return "3";
+                })
+                .style("stroke", "#007bff");
 
             var label = node.append("svg:text")
                 .text(function (d) { return truncateString(d.song_name, 20); })
