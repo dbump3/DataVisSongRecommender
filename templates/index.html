@@ -187,6 +187,7 @@
                 .enter().append("g")
                 .attr("class", "node")
                 .on("click", nodeClicked)
+                .on("mouseover", nodeMouseover)
             
             node.append("circle")
                 .attr("class", "unpinned")
@@ -236,6 +237,10 @@
             function nodeClicked(d) {
                 updateSongInput(d.song_name);
                 $('#inputSong').val(d.song_name);
+            };
+
+            function nodeMouseover(d) {
+                d3.select(this).style("cursor", "pointer"); 
             };
 
             function getNodeSize(similarity) {
