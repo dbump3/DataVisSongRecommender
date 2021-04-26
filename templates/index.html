@@ -244,6 +244,13 @@
                     edges.push(newEdge);
                 }
             }
+
+            var min = 10;
+            var max = -1;
+            for (const [key, n] of Object.entries(nodes)) {
+                if (n.weight < min) min = n.weight;
+                if (n.weight > max) max = n.weight;
+            }
             
             // Printing these is great for testing
             // console.log(nodes);
@@ -285,9 +292,9 @@
             node.append("circle")
                 .attr("class", "unpinned")
                 .attr("r", function(d) {
-                    const minRadius = 25;
+                    const minRadius = 35;
                     const maxRadius = 60;
-                    return (maxRadius / (maxRadius + 2 * d.weight)) * (maxRadius-minRadius) + minRadius;
+                    return (d.weight - min) / (max - min) * (minRadius-maxRadius) + maxRadius;
                 })
                 .style("cursor", "pointer")
                 .style("fill", d => {
