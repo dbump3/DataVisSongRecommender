@@ -217,7 +217,6 @@
             var dan = $('#danGroup label[for="' + $('#danGroup input:radio:checked').attr('id') + '"]').text();
             var ins = $('#insGroup label[for="' + $('#insGroup input:radio:checked').attr('id') + '"]').text();
             var filters = `${pop}&,&${dur}&,&${dan}&,&${ins}`
-            console.log(filters)
 
             // get similar songs and build graph
             fetch(`/getdata/${songName}&,&${filters}`)

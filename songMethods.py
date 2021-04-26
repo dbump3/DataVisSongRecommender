@@ -26,8 +26,6 @@ visited = set()
 
 # Given a song ID, get the index of the song in data
 def getIndexFromId(newData, songId):
-    print(newData[:,0])
-    print(np.argwhere(newData[:,0] == songId))
     return np.argwhere(newData[:,0] == songId)[0][0]
 
 # Given a song name, get the index of the song in data
