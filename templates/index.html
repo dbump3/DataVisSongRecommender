@@ -30,12 +30,10 @@
     .slider-container {
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
         align-items: center;
-        height: 40vh;
     }
     .slider {
-        width: 80%;
+        width: 100%;
     }
     path.link {
         fill: none;
@@ -51,6 +49,13 @@
         justify-content: center;
         align-items: center;
         height: 100%;
+    }
+    .button-group-custom {
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 40vh;
     }
 
 
@@ -79,48 +84,93 @@
             </form>
 
             <div class="slider-container">
-                <div class="slider-text" style="text-align:center">
-                    <h3>Similarity Weights</h3>
-                    <p>
-                        These sliders represent how similar each feature will be in the recommended songs
-                    </p>
+                <div>
+                    <h2>Feature Filtering</h2>
+                    <p>Filter the graph songs by each feature</p>
                 </div>
-                <div class="slider">
-                    <label class ="attr">
-                        Popularity
-                    </label>
-                    <div class="d-flex align-items-center my-2">
-                        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-                        <form class="range-field w-100">
-                            <input class="border-0" type="range" min="0" max="100" />
-                        </form>
-                        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                <div class="button-group-custom">
+                    <h3>Popularity</h3>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div>
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">Low</button>
+                                <button type="button" class="btn btn-primary">Medium</button>
+                                <button type="button" class="btn btn-primary">High</button>
+                              </div>
+                              <div class="btn-group" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-primary">Any</button>
+                              </div>
+                        </div>
                     </div>
-                </div>
-                <div class="slider">
-                    <label class="attr">
-                        Release Date
-                    </label>
-                    <div class="d-flex align-items-center my-2">
-                        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-                        <form class="range-field w-100">
-                            <input class="border-0" type="range" min="0" max="100" />
-                        </form>
-                        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                    <h3>Popularity</h3>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div>
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">Low</button>
+                                <button type="button" class="btn btn-primary">Medium</button>
+                                <button type="button" class="btn btn-primary">High</button>
+                              </div>
+                              <div class="btn-group" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-primary">Any</button>
+                              </div>
+                        </div>
                     </div>
-                </div>
-                <div class="slider">
-                    <label class ="attr">
-                        Danceability
-                    </label>
-                    <div class="d-flex align-items-center my-2">
-                        <span class="font-weight-bold indigo-text mr-2 mt-1">0</span>
-                        <form class="range-field w-100 ">
-                            <input type="range" min="0" max="100" />
-                        </form>
-                        <span class="font-weight-bold indigo-text ml-2 mt-1">100</span>
+                    <h3>Popularity</h3>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div>
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">Low</button>
+                                <button type="button" class="btn btn-primary">Medium</button>
+                                <button type="button" class="btn btn-primary">High</button>
+                              </div>
+                              <div class="btn-group" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-primary">Any</button>
+                              </div>
+                        </div>
                     </div>
+                    <h3>Popularity</h3>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div>
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">Low</button>
+                                <button type="button" class="btn btn-primary">Medium</button>
+                                <button type="button" class="btn btn-primary">High</button>
+                              </div>
+                              <div class="btn-group" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-primary">Any</button>
+                              </div>
+                        </div>
+                    </div>
+                    <h3>Popularity</h3>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div>
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">Low</button>
+                                <button type="button" class="btn btn-primary">Medium</button>
+                                <button type="button" class="btn btn-primary">High</button>
+                              </div>
+                              <div class="btn-group" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-primary">Any</button>
+                              </div>
+                        </div>
+                    </div>
+                    <h3>Popularity</h3>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div>
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-primary">Low</button>
+                                <button type="button" class="btn btn-primary">Medium</button>
+                                <button type="button" class="btn btn-primary">High</button>
+                              </div>
+                              <div class="btn-group" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-primary">Any</button>
+                              </div>
+                        </div>
+                    </div>
+
                 </div>
+                
+                
             </div>
         </div>
         <div class="grid-child middle" id="canvas">
@@ -179,7 +229,6 @@
                 .then(kSimilarSongs => {
                     // turn kSimilarSongs into nodes format
                     var nodes = {};
-                    console.log(kSimilarSongs)
                     kSimilarSongs.forEach(song => {
                         nodes[song[0]] = {id: song[0], song_name: song[1], song_artist: song[2], weight: song[3], parent: song[4]}
                     });
@@ -200,8 +249,10 @@
                     edges.push(newEdge);
                 }
             }
-            console.log(nodes);
-            console.log(edges);
+            
+            // Printing these is great for testing
+            // console.log(nodes);
+            // console.log(edges);
 
             var width = $("#canvas").width()
             var height = $("#canvas").height()
@@ -329,7 +380,6 @@
                         dy = parseFloat(text.attr("dy"));
                     if (words.length <= 1) { return; } 
                     var tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-                    console.log(words);
                     var size = 0;
                     while (word = words.pop()) {
                         line.push(word);
@@ -349,7 +399,10 @@
                 });
             }
         }
-    </script>
 
+        var initialSong = "Stressed Out";
+        songInput.value = initialSong
+        updateSongInput(initialSong);
+    </script>
 
 <body>
