@@ -1,39 +1,71 @@
 import numpy as np
 import pandas as pd
 import scipy.spatial
+from sklearn.preprocessing import normalize
 
 # read data
 raw_data = pd.read_csv('data/tracks.csv')
-data = np.array(raw_data[['id', 'name', 'artists', 'acousticness', 'danceability', 'energy', 'duration_ms', 'instrumentalness', 'valence', 'popularity', 'tempo', 'liveness', 'loudness', 'speechiness']])
+data = np.array(raw_data[['id', 'name', 'artists', 'popularity', 'duration_ms', 'danceability', 'instrumentalness', 'energy', 'valence', 'acousticness', 'tempo', 'liveness', 'loudness', 'speechiness']])
+
+def normalize_data(data_in):
+    for i in range(3, np.shape(data_in)[1]):
+        data_min = np.min(data_in[:,i])
+        data_max = np.max(data_in[:,i])
+        first_part = data_in[:,:i]
+        second_part = np.array([( data_in[:,i] + data_min ) / (np.max(data_in[:,i]) + data_min)]).T
+        data_a = np.concatenate((first_part, second_part), axis=1)
+        data_in = np.concatenate((data_a, data_in[:,i+1:]), axis=1)
+    return data_in
+
+data = normalize_data(data)
+data = np.concatenate((data[:,:3], data[:,3:]), axis=1)
 song_names_lower = np.char.lower(np.array(data[:,1], dtype=str))
 visited = set()
 
 
+
 # Given a song ID, get the index of the song in data
-def getIndexFromId(songId):
-    return np.argwhere(data[:,0] == songId)[0][0]
+def getIndexFromId(newData, songId):
+    print(newData[:,0])
+    print(np.argwhere(newData[:,0] == songId))
+    return np.argwhere(newData[:,0] == songId)[0][0]
 
 # Given a song name, get the index of the song in data
-def getIndexFromName(songName):
-    return np.argwhere(data[:,1] == songName)[0][0]
+def getIndexFromName(newData, songName):
+    return np.argwhere(newData[:,1] == songName)[0][0]
 
 # Given a song name, get the id of the song in data
 def getIdFromName(songName):
-    return data[getIndexFromName(songName)][0]
+    return data[getIndexFromName(data, songName)][0]
 
 # Given a song ID, get the k most similar songs
-def getKSimilarSongs(songName, k):
-    songId, artists = data[getIndexFromName(songName)][0], data[getIndexFromName(songName)][2].strip('][\'').split(', ')
+def getKSimilarSongs(songName, k, filters):
+    songIndex = getIndexFromName(data, songName)
+    songId, artists = data[songIndex][0], data[songIndex][2].strip('][\'').split(', ')
     root = [[songId, songName, artists, 0.0, None]]
     visited.clear()
     visited.add(songId)
-    newData = data[0.0 < data[:,3]]
+    newData = data
+    for i in range(len(filters)):
+        low, high = getRange(filters[i])
+        newData = newData[low <= newData[:,i+3]]
+        newData = newData[newData[:,i+3] <= high]
     # print(newData)
     return root + getKSimilarSongsHelper(songId, k, 0, newData)
     
+def getRange(filter_val):
+    if filter_val == "Any":
+        return [0.0,1.0]
+    elif filter_val == "Low" or filter_val == "Short":
+        return [0.0,0.33]
+    elif filter_val == "Medium":
+        return [0.33,0.67]
+    elif filter_val == "High" or filter_val == "Long":
+        return [0.67,1.0]
+
 def getKSimilarSongsHelper(songId, k, similarity, newData):
     # create new array with input song
-    inputSong = np.expand_dims(newData[getIndexFromId(songId)], axis=0)
+    inputSong = np.expand_dims(data[getIndexFromId(data, songId)], axis=0)
 
     # get distance between input song and all other songs
     # note that the first column (id) is cut off since it is a string
@@ -79,4 +111,4 @@ def slicer_vectorized(a,start,end):
 
 # print(finishSongName("car"))
 # sample input:
-print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))
+# print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))

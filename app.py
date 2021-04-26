@@ -16,10 +16,12 @@ app = Flask(__name__)
 def home_page():
     return render_template('index.html')
 
-@app.route('/getdata/<songName>', methods=['GET', 'POST'])
-def data_get(songName):
+@app.route('/getdata/<inputData>', methods=['GET', 'POST'])
+def data_get(inputData):
     if request.method == 'GET': # GET request
-        return jsonify(getKSimilarSongs(songName, 7)) # serialize and use JSON headers
+        inputData = inputData.split("&,&")
+        songName, filters = inputData[0], inputData[1:]
+        return jsonify(getKSimilarSongs(songName, 7, filters)) # serialize and use JSON headers
     if request.method == 'POST': # POST request
         print(request.get_json()) # parse as JSON
         return 'Sucesss', 200

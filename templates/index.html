@@ -95,7 +95,7 @@
                 <div class="button-group-custom">
                     <h3>Popularity</h3>
                     <div>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group"> 
+                        <div id="popGroup" class="btn-group" role="group" aria-label="Basic radio toggle button group"> 
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio1">Any</label>
                         
@@ -111,7 +111,7 @@
                     </div>
                     <h3>Duration</h3>
                     <div>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group" id="new"> 
+                        <div id="durGroup" class="btn-group" role="group" aria-label="Basic radio toggle button group"> 
                             <input type="radio" class="btn-check" name="btnradio2" id="btnradio5" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio5">Any</label>
                         
@@ -127,7 +127,7 @@
                     </div>
                     <h3>Danceability</h3>
                     <div>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group" id="new"> 
+                        <div id="danGroup" class="btn-group" role="group" aria-label="Basic radio toggle button group" id="new"> 
                             <input type="radio" class="btn-check" name="btnradio3" id="btnradio9" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio9">Any</label>
                         
@@ -143,7 +143,7 @@
                     </div>
                     <h3>Instrumentalness</h3>
                     <div>
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group" id="new"> 
+                        <div id="insGroup" class="btn-group" role="group" aria-label="Basic radio toggle button group" id="new"> 
                             <input type="radio" class="btn-check" name="btnradio4" id="btnradio13" autocomplete="off" checked>
                             <label class="btn btn-outline-primary" for="btnradio13">Any</label>
                         
@@ -212,8 +212,15 @@
                     console.log("Error finding song: " + songName);
                 });
 
+            var pop = $('#popGroup label[for="' + $('#popGroup input:radio:checked').attr('id') + '"]').text();
+            var dur = $('#durGroup label[for="' + $('#durGroup input:radio:checked').attr('id') + '"]').text();
+            var dan = $('#danGroup label[for="' + $('#danGroup input:radio:checked').attr('id') + '"]').text();
+            var ins = $('#insGroup label[for="' + $('#insGroup input:radio:checked').attr('id') + '"]').text();
+            var filters = `${pop}&,&${dur}&,&${dan}&,&${ins}`
+            console.log(filters)
+
             // get similar songs and build graph
-            fetch(`/getdata/${songName}`)
+            fetch(`/getdata/${songName}&,&${filters}`)
                 .then(response => response.json())
                 .then(kSimilarSongs => {
                     // turn kSimilarSongs into nodes format
