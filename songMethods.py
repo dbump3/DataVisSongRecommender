@@ -46,14 +46,14 @@ def getKSimilarSongs(songName, k, filters):
     newData = data
     for i in range(len(filters)):
         low, high = getRange(filters[i])
-        newData = newData[low <= newData[:,i+3]]
-        newData = newData[newData[:,i+3] <= high]
-    # print(newData)
+        if low is not None:
+            newData = newData[low <= newData[:,i+3]]
+            newData = newData[newData[:,i+3] <= high]
     return root + getKSimilarSongsHelper(songId, k, 0, newData)
     
 def getRange(filter_val):
     if filter_val == "Any":
-        return [0.0,1.0]
+        return [None,None]
     elif filter_val == "Low" or filter_val == "Short":
         return [0.0,0.33]
     elif filter_val == "Medium":
