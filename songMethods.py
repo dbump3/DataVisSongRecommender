@@ -27,23 +27,25 @@ def getKSimilarSongs(songName, k):
     root = [[songId, songName, artists, 0.0, None]]
     visited.clear()
     visited.add(songId)
-    return root + getKSimilarSongsHelper(songId, k, 0)
+    newData = data[0.0 < data[:,3]]
+    # print(newData)
+    return root + getKSimilarSongsHelper(songId, k, 0, newData)
     
-def getKSimilarSongsHelper(songId, k, similarity):
+def getKSimilarSongsHelper(songId, k, similarity, newData):
     # create new array with input song
-    inputSong = np.expand_dims(data[getIndexFromId(songId)], axis=0)
+    inputSong = np.expand_dims(newData[getIndexFromId(songId)], axis=0)
 
     # get distance between input song and all other songs
     # note that the first column (id) is cut off since it is a string
-    diff = scipy.spatial.distance.cdist(inputSong[:,3:], data[:,3:], metric='euclidean')[0]
+    diff = scipy.spatial.distance.cdist(inputSong[:,3:], newData[:,3:], metric='euclidean')[0]
     
     # get k most similar indexes of songs
     kMostSimlarIndexes = np.argpartition(diff, k)[1:k+1]
 
     # return array containing k pairs of [songId, songName, artists, similarityRating, parentId]
-    songs = (np.column_stack((data[kMostSimlarIndexes][:,0],
-                              data[kMostSimlarIndexes][:,1],
-                              data[kMostSimlarIndexes][:,2],
+    songs = (np.column_stack((newData[kMostSimlarIndexes][:,0],
+                              newData[kMostSimlarIndexes][:,1],
+                              newData[kMostSimlarIndexes][:,2],
                               diff[kMostSimlarIndexes],
                               [songId]*len(kMostSimlarIndexes)))).tolist()
 
@@ -58,7 +60,7 @@ def getKSimilarSongsHelper(songId, k, similarity):
             # recursively add more songs with half as many songs at each step
             newK = k // 2
             if newK > 1:
-                newSongs += getKSimilarSongsHelper(song[0], newK, song[3]) # add children
+                newSongs += getKSimilarSongsHelper(song[0], newK, song[3], newData) # add children
 
     return newSongs 
 
@@ -77,4 +79,4 @@ def slicer_vectorized(a,start,end):
 
 # print(finishSongName("car"))
 # sample input:
-# print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))
+print(getKSimilarSongs("Easy Living (with Teddy Wilson & His Orchestra)", 4))
